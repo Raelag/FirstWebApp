@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MessagesModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="MessagesModelStoreContainer">
+    <EntitySet Name="Posts" EntityType="MessagesModel.Store.Posts" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Replies" EntityType="MessagesModel.Store.Replies" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_Replies_Posts" Association="MessagesModel.Store.FK_Replies_Posts">
+      <End Role="Posts" EntitySet="Posts" />
+      <End Role="Replies" EntitySet="Replies" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Posts">
+    <Key>
+      <PropertyRef Name="PostID" />
+    </Key>
+    <Property Name="PostID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Replies">
+    <Key>
+      <PropertyRef Name="ReplyID" />
+    </Key>
+    <Property Name="ReplyID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="PostID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Replies_Posts">
+    <End Role="Posts" Type="MessagesModel.Store.Posts" Multiplicity="1" />
+    <End Role="Replies" Type="MessagesModel.Store.Replies" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Posts">
+        <PropertyRef Name="PostID" />
+      </Principal>
+      <Dependent Role="Replies">
+        <PropertyRef Name="PostID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

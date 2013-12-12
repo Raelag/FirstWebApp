@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MessagesModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="MessagesModelStoreContainer">
+          <EntitySet Name="Posts" EntityType="MessagesModel.Store.Posts" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Replies" EntityType="MessagesModel.Store.Replies" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Replies_Posts" Association="MessagesModel.Store.FK_Replies_Posts">
+            <End Role="Posts" EntitySet="Posts" />
+            <End Role="Replies" EntitySet="Replies" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Posts">
+          <Key>
+            <PropertyRef Name="PostID" />
+          </Key>
+          <Property Name="PostID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Replies">
+          <Key>
+            <PropertyRef Name="ReplyID" />
+          </Key>
+          <Property Name="ReplyID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="PostID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Replies_Posts">
+          <End Role="Posts" Type="MessagesModel.Store.Posts" Multiplicity="1" />
+          <End Role="Replies" Type="MessagesModel.Store.Replies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Posts">
+              <PropertyRef Name="PostID" />
+            </Principal>
+            <Dependent Role="Replies">
+              <PropertyRef Name="PostID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MessagesModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="MessagesEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Posts" EntityType="MessagesModel.Post" />
+          <EntitySet Name="Replies" EntityType="MessagesModel.Reply" />
+          <AssociationSet Name="FK_Replies_Posts" Association="MessagesModel.FK_Replies_Posts">
+            <End Role="Posts" EntitySet="Posts" />
+            <End Role="Replies" EntitySet="Replies" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="PostID" />
+          </Key>
+          <Property Name="PostID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Replies" Relationship="MessagesModel.FK_Replies_Posts" FromRole="Posts" ToRole="Replies" />
+        </EntityType>
+        <EntityType Name="Reply">
+          <Key>
+            <PropertyRef Name="ReplyID" />
+          </Key>
+          <Property Name="ReplyID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="PostID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Comment" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Posts" Relationship="MessagesModel.FK_Replies_Posts" FromRole="Replies" ToRole="Posts" />
+        </EntityType>
+        <Association Name="FK_Replies_Posts">
+          <End Role="Posts" Type="MessagesModel.Post" Multiplicity="1" />
+          <End Role="Replies" Type="MessagesModel.Reply" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Posts">
+              <PropertyRef Name="PostID" />
+            </Principal>
+            <Dependent Role="Replies">
+              <PropertyRef Name="PostID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MessagesModelStoreContainer" CdmEntityContainer="MessagesEntities">
+          <EntitySetMapping Name="Posts">
+            <EntityTypeMapping TypeName="MessagesModel.Post">
+              <MappingFragment StoreEntitySet="Posts">
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Replies">
+            <EntityTypeMapping TypeName="MessagesModel.Reply">
+              <MappingFragment StoreEntitySet="Replies">
+                <ScalarProperty Name="ReplyID" ColumnName="ReplyID" />
+                <ScalarProperty Name="PostID" ColumnName="PostID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

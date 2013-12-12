@@ -1,0 +1,196 @@
+﻿<html>
+    <title>@ViewBag.Title</title>
+<style type="text/css">
+    #main {
+    }
+
+    #header {
+        background: url("logo3.png") no-repeat bottom right;
+        width: 100%;
+        float: top;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    #logo {
+        background: url("logo1.png") no-repeat;
+        width: 400px;
+        height: 200px;
+        float: left;
+    }
+
+    #logo2 {
+        background: #afeeee;
+        margin-left: 400px;
+        width: 1000px;
+        height: 150px;
+        float: top;
+    }
+
+    .m1 {
+        position: relative;
+    }
+
+    ul {
+        display: block;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        background: url("logo2.png") no-repeat bottom;
+    }
+
+        ul:after {
+            display: block;
+            content: ' ';
+            clear: both;
+            float: none;
+        }
+
+        ul.m1 > li {
+            float: left;
+            position: relative;
+        }
+
+            ul.m1 > li > a {
+                display: block;
+                width: 160px;
+                height: 10px;
+                padding: 20px;
+                color: black;
+                text-decoration: none;
+            }
+
+                ul.m1 > li > a:hover {
+                    color: white;
+                    background-color: black;
+                }
+
+        ul.sm1 {
+            display: none;
+            position: absolute;
+            width: 200px;
+            height: 50px;
+            top: 50px;
+            left: 0px;
+            background-color: white;
+        }
+
+            ul.sm1 > li {
+                display: block;
+            }
+
+                ul.sm1 > li > a {
+                    display: block;
+                    padding: 10px;
+                    color: black;
+                    background-color: orange;
+                    text-decoration: none;
+                }
+
+                    ul.sm1 > li > a:hover {
+                        color: white;
+                        text-decoration: underline;
+                        background: #222222;
+                    }
+
+        ul.m1 > li:hover > ul.sm1 {
+            display: block;
+        }
+        ul.m1 > li:hover > ul.sm1 > li:hover {
+            display: inherit;
+        }
+
+    #container {
+        position: relative;
+        margin-left: 400px;
+        background: #555555;
+        width: 1000px;
+        height: 1000px;
+    }
+
+    #footer {
+        background: #666666;
+        margin: 10px auto;
+    }
+
+    #clear {
+        clear: both;
+    }
+</style>
+<body bgcolor="#123456">
+    <div id="main">
+
+        <div id="header">
+            <div id="logo">
+                <!img src="logo1.png" />
+            </div>
+            <div id="logo2">
+                <form action="Reg.htm" method="POST">
+                    <p align="right">
+                        Логин:
+                            <input type="text" /><br />
+                        Пароль:
+                            <input type="password" /><br />
+                        <input type="checkbox" value="yes" />Запомнить<br />
+                        <input type="submit" value="Вход" /><br />
+                    </p>
+                </form>
+                <form action="Reg.htm" method="POST">
+                    <p align="right">
+                        <input type="submit" value="Регистрация" /><br />
+                    </p>
+                </form>
+            </div>
+            <div>
+                <ul class="m1">
+                    <li><a href="#">1</a>
+                        <ul class="sm1">
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">1</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">2</a>
+                        <ul class="sm1">
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">2</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">3</a>
+                        <ul class="sm1">
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">3</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">4</a>
+                        <ul class="sm1">
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">4</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">5</a>
+                        <ul class="sm1">
+                            <li><a href="#">5</a></li>
+                            <li><a href="#">5</a></li>
+                            <li><a href="#">5</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="container">
+            @RenderBody()
+        </div>
+
+        <div id="clear"></div>
+        <div id="footer">
+            Made in China
+        </div>
+
+    </div>
+</body>
+</html>

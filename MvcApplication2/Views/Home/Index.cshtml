@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Index";
+   // Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<table>
+    <tr>
+        <td>ID</td>
+        <td>Title</td>
+        <td>Message</td>
+        <td>Date</td>
+    </tr>
+    @foreach (var c in ViewBag.Coll)
+    {
+        <tr>
+            <td>@c.PostID</td>
+            <td>@c.Title</td>
+            <td>@c.Message</td>
+            <td>@c.Date.ToString()</td>
+        </tr>
+    }
+</table>
+<br/><br/>
+    @foreach (var c in ViewBag.Coll)
+    {
+        <form action="~/Home/Post" method="POST">
+            <label for="ID">@c.Title</label>
+            <input id="ID" type="hidden" name="ID" value="@c.PostID"/><br/>
+            <input id="rep" type="hidden" name="rep" value="0"/>
+            <label>@c.Date.ToString()</label><br/>
+            <label>@c.Message</label><br/>
+            <input type="submit" value="Comment"/>
+        </form>
+    }
+<br />
+<form action="~/Home/Index" method="POST">
+    <label for="title">Title:</label><br/>
+    <input id="title" type="text" name="title" size="65" required/><br/>
+    <label for="message">Message</label><br/>
+    <textarea id="message"name="message" cols="50" rows="10" required></textarea><br/>
+    <input type="submit" name="Input" value="Send"/>
+</form>
