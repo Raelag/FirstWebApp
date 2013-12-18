@@ -1,0 +1,34 @@
+﻿@model IEnumerable<MvcApplication2.Post>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@Html.ActionLink("Sign Out","Logout","Admin")
+
+<br/><br/>
+    @foreach (var c in Model)
+    {// action="~/Admin/Post"
+        <fieldset style="width: 50%">
+            <legend>@c.Title</legend>
+            <div>@c.Date.ToString()</div><br/>
+            <fieldset>
+                <div>@c.Message</div>
+            </fieldset>
+            @Html.ActionLink("Delete", "Delete", new { id=c.PostID }) | 
+            @Html.ActionLink("Edit", "Edit", new { id=c.PostID })
+        </fieldset>
+    }
+<br />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <label for="title">Title:</label><br/>
+    <input id="title" type="text" name="title" size="65" required/><br/>
+    <label for="message">Message</label><br/>
+    <textarea id="message"name="message" cols="50" rows="10" required></textarea><br/>
+    <input type="submit" name="Input" value="Send"/>
+}
+<form action="~/Admin/Index" method="POST">
+
+</form>

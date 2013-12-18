@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web.Mvc;
 using System.Web.WebPages;
 
@@ -11,79 +13,60 @@ namespace MvcApplication2.Controllers
         //
         // GET: /Home/
 
-        private Collection<Post> collPosts; 
-        private Collection<Reply> collReplies;
-        private MessagesEntities ME;
-
-        public HomeController()
-        {
-            collPosts = new Collection<Post>();
-            collReplies = new Collection<Reply>();
-            ME = new MessagesEntities();
-        }
+        private MessagesEntities db = new MessagesEntities();
 
         public ActionResult Index()
         {
-            var posts = from Post in ME.Posts select Post;
-            foreach (Post P in posts)
-            {
-                collPosts.Add(P);
-            }
-            ViewBag.Coll = collPosts;
-            return View();
+            return View(db.Posts.ToList());
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Index(string title, string message)
         {
             Post Pt = new Post();
             Pt.Title = title;
             Pt.Message = message;
             Pt.Date = DateTime.Now;
-            ME.Posts.Add(Pt);
-            ME.SaveChanges();
+            db.Posts.Add(Pt);
+            db.SaveChanges();
+            return View(db.Posts.ToList());
+        }
 
-
-            var posts = from Post in ME.Posts select Post;
-            foreach (Post P in posts)
-            {
-                collPosts.Add(P);
-            }
-            ViewBag.Coll = collPosts;
-            return View(collPosts);
+        [HttpGet]
+        public ActionResult Post(string id)
+        {
+            int ID;
+            ID = Convert.ToInt32(id);
+            var p = (from Post in db.Posts where Post.PostID == ID select Post).First();
+            ViewBag.Post = p;
+            var replies = from Reply in db.Replies where Reply.PostID == ID select Reply;
+            return View(replies.ToList());
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Post(FormCollection form)
         {
             int ID;
             Reply reply = new Reply();
-            Post p;
-            int rep = Convert.ToInt32(form["rep"]);
-            if (rep == 0)
-            {
-                ID = Convert.ToInt32(form["ID"]);
-                p = (from Post in ME.Posts where Post.PostID == ID select Post).First();
-            }
-            else
-            {
-                ID = Convert.ToInt32(form["postid"]);
-                reply.PostID = ID;
-                reply.Name = form["name"].ToString();
-                reply.Email = form["email"].ToString();
-                reply.Comment = form["comment"].ToString();
-                reply.Date = DateTime.Now;
-                ME.Replies.Add(reply);
-                ME.SaveChanges();
-                p = (from Post in ME.Posts where Post.PostID == reply.PostID select Post).First();
-            }
+            ID = Convert.ToInt32(form["postid"]);
+            reply.PostID = ID;
+            reply.Name = form["name"].ToString();
+            reply.Email = form["email"].ToString();
+            reply.Comment = form["comment"].ToString();
+            reply.Date = DateTime.Now;
+            db.Replies.Add(reply);
+            db.SaveChanges();
+            var p = (from Post in db.Posts where Post.PostID == ID select Post).First();
             ViewBag.Post = p;
-            var replies = from Reply in ME.Replies where Reply.PostID == ID select Reply;
-            foreach (var r in replies)
-            {
-                collReplies.Add(r);
-            }
-            return View(collReplies);
+            var replies = from Reply in db.Replies where Reply.PostID == ID select Reply;
+            return View(replies.ToList());
+        }
+        protected override void Dispose(bool disposing)
+        {
+            db.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

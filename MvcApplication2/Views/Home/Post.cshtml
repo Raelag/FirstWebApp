@@ -1,34 +1,38 @@
 ﻿@{
     ViewBag.Title = "Post";
-   // Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @Html.ActionLink("<--Back","Index","Home")
 
-<div>@ViewBag.Post.Title</div>
-<div>@ViewBag.Post.Date</div><br/>
-<div>@ViewBag.Post.Message</div><br/>
+<fieldset style="width: 50%">
+    <legend>@ViewBag.Post.Title</legend>
+    <div>@ViewBag.Post.Date</div>
+    <fieldset>
+        <div>@ViewBag.Post.Message</div>
+    </fieldset>
+</fieldset>
 
-
-<p>Коментарии</p>
-
-@foreach (var r in Model)
-{
-    <div>@r.Name</div>
-    <div>@r.Date</div>
-    <div>@r.Email</div>
-    <div>@r.Comment</div>
-    <br/>
-}
-
+<fieldset style="width: 50%">
+    <legend>Comments</legend>
+    @foreach (var r in Model)
+    {
+        <fieldset>
+            <legend>@r.Name</legend>
+            <div>@r.Date</div>
+            <div>@r.Email</div>
+            <fieldset>
+                <div>@r.Comment</div>
+            </fieldset>
+        </fieldset>
+    }
+</fieldset>
 <form action="~/Home/Post" method="POST">
     <input id="postid" type="hidden" name="postid" value="@ViewBag.Post.PostID"/>
-    <input id="rep" type="hidden" name="rep" value="1"/>
     <label for="name">Name:</label><br/>
     <input id="name" type="text" name="name" size="65" required/><br/>
     <label for="email">Email:</label><br/>
     <input id="email" type="text" name="email" size="65" required/><br/>
     <label for="comment">Comment</label><br/>
-    <textarea id="comment"name="comment" cols="50" rows="10"></textarea><br/>
-    <input type="submit" name="Input" value="Comment" required=""/>
+    <textarea id="comment"name="comment" cols="50" rows="10" required></textarea><br/>
+    <input type="submit" name="Input" value="Comment"/>
 </form>
